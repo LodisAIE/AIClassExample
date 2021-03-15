@@ -2,6 +2,9 @@
 #include "raylib.h"
 #include "Player.h"
 #include "SeekBehaviour.h"
+#include "DecisionBehaviour.h"
+#include "PursueDecision.h"
+#include "ComplexEnemy.h"
 
 bool Game::m_gameOver = false;
 Scene** Game::m_scenes = new Scene*;
@@ -32,7 +35,12 @@ void Game::start()
 	//Initialize agents
 	Player* player = new Player(10, 10, 5, "Images/player.png", 1, 10);
 	Agent* enemy = new Agent(20, 20, 1, "Images/enemy.png", 10, 10);
+	ComplexEnemy* complexEnemy = new ComplexEnemy(20, 20, 1, "Images/enemy.png", player, 10, 10);
+	PursueDecision* pursueDecision = new PursueDecision();
+	DecisionBehaviour* decisionBehaviour = new DecisionBehaviour(pursueDecision);
 
+	complexEnemy->addBehaviour(decisionBehaviour);
+	
 	//Create a new steering behaviour and adds it to the enemy 
 	SeekBehaviour* seek = new SeekBehaviour(player, 10);
 	enemy->addBehaviour(seek);
